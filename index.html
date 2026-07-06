@@ -509,6 +509,10 @@ function parseGSheetData(text) {
 
     if(!tlc_o || !tlc_t) return;
     if(/VIA SUB|HEADER/i.test(tlc_o+tlc_t)) return;
+    
+    // Validasi kolom VIA agar tidak memproses rute yang barisnya bergeser / kosong di GSheet
+    const viaUpper = via.toUpperCase();
+    if(!/DARAT|LAUT|UDARA/i.test(viaUpper)) return;
 
     const co = COORDS_DB[tlc_o] || null;
     const ct = COORDS_DB[tlc_t] || null;
