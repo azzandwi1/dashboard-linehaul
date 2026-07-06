@@ -453,11 +453,14 @@ function parseCSV(text) {
   return rows;
 }
 
+let lastFetchError = '';
+
 // ══ FETCH GSHEET ══
 async function fetchGSheet() {
   setB('loading','Memuat...');
   const ltxt = document.getElementById('ltxt');
   if(ltxt) ltxt.textContent = 'Memuat data dari Google Sheets...';
+  lastFetchError = '';
 
   const ctrl  = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), 12000);
@@ -474,6 +477,7 @@ async function fetchGSheet() {
     return { text:raw, source:'Google Sheets (Live)' };
   } catch(e) {
     clearTimeout(timer);
+    lastFetchError = e.name === 'AbortError' ? 'Koneksi Timeout (12s)' : e.message;
     console.error('[GSheet] Gagal:', e.message);
     return null;
   }
@@ -659,7 +663,7 @@ async function loadData() {
     console.warn('[loadData] Fallback ke data lokal. routes:', data ? data.routes.length : 'null');
     data = LOCAL_FALLBACK_DATA;
     setB('warn', 'Offline (Lokal)');
-    document.getElementById('info-status').textContent = 'Data lokal — GSheet tidak tersambung';
+    document.getElementById('info-status').textContent = 'Offline: Data lokal (' + (lastFetchError || 'Koneksi gagal') + ')';
   } else {
     const now = new Date().toLocaleTimeString('id-ID', {hour:'2-digit',minute:'2-digit'});
     console.log('[loadData] Live OK — routes:', data.routes.length, '| nodes:', data.nodes.length);
