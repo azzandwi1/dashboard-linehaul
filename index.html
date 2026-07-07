@@ -132,6 +132,7 @@
     .hub-badge{font-size:9px;padding:2px 5px;border-radius:4px;font-weight:700;flex-shrink:0}
     .hb-h{background:rgba(239,68,68,.15);color:#ef4444}
     .hb-s{background:rgba(34,197,94,.15);color:#22c55e}
+    .hb-d{background:rgba(234,179,8,.15);color:#ca8a04}
     .pop{font-family:'Inter',sans-serif;min-width:230px}
     .pop h3{font-size:14px;font-weight:700;margin-bottom:4px}
     .pop .tag{display:inline-block;padding:2px 8px;border-radius:5px;font-size:10px;font-weight:700;margin-bottom:10px}
@@ -1072,13 +1073,19 @@ function resetF() {
 function rHL(q='') {
   if(!allData) return;
   const qL=q.toLowerCase(), list=document.getElementById('hub-list');
+  const statusOrder = {'HUB UTAMA':0,'SUB HUB':1,'KABUPATEN PENERUSAN (DROPING)':2};
   const nodes = allData.nodes
-    .filter(n => n.status==='HUB UTAMA' || n.status==='SUB HUB')
+    .filter(n => n.status==='HUB UTAMA' || n.status==='SUB HUB' || n.status==='KABUPATEN PENERUSAN (DROPING)')
     .filter(n => !qL || n.nama.toLowerCase().includes(qL) || n.id.toLowerCase().includes(qL))
-    .sort((a,b) => a.status!==b.status ? (a.status==='HUB UTAMA'?-1:1) : a.nama.localeCompare(b.nama));
+    .sort((a,b) => {
+      const oa = statusOrder[a.status]??9, ob = statusOrder[b.status]??9;
+      return oa!==ob ? oa-ob : a.nama.localeCompare(b.nama);
+    });
   list.innerHTML='';
   nodes.forEach(n => {
-    const col=SC[n.status]||'#94a3b8', bc=n.status==='HUB UTAMA'?'hb-h':'hb-s', bt=n.status==='HUB UTAMA'?'HUB':'SUB';
+    const col=SC[n.status]||'#94a3b8';
+    const bc = n.status==='HUB UTAMA' ? 'hb-h' : n.status==='SUB HUB' ? 'hb-s' : 'hb-d';
+    const bt = n.status==='HUB UTAMA' ? 'HUB' : n.status==='SUB HUB' ? 'SUB' : 'DROP';
     const el = document.createElement('div'); el.className='hub-item';
     el.innerHTML='<div class="hub-dot" style="background:'+col+'"></div>'+
       '<div class="hub-name">'+n.nama+'</div><div class="hub-code">'+n.id+'</div>'+
