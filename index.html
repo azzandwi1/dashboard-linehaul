@@ -368,6 +368,7 @@
 </div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-polylinedecorator/1.6.0/leaflet.polylineDecorator.min.js"></script>
 <script>
 window.onerror = function(m,s,l,c,e) {
   const el = document.getElementById('ltxt');
@@ -826,6 +827,27 @@ function rM() {
     ln.on('click', e => { L.DomEvent.stopPropagation(e); sRI(r, o, t, col); });
     ln.bindTooltip('<b>'+o.nama+'</b> \u2192 <b>'+t.nama+'</b><br/>'+r.via+(r.jarak?' | '+r.jarak+' km':''), {sticky:true,direction:'top'});
     rL.addLayer(ln);
+
+    // Tambahkan dekorator panah penunjuk arah aliran rute (Origin -> Destination) di tengah garis
+    const decorator = L.polylineDecorator(ln, {
+      patterns: [
+        {
+          offset: '50%',
+          repeat: 0,
+          symbol: L.Symbol.arrowHead({
+            pixelSize: 9,
+            polygon: false,
+            headAngle: 60,
+            pathOptions: {
+              color: col,
+              fillOpacity: 1,
+              weight: 2
+            }
+          })
+        }
+      ]
+    });
+    rL.addLayer(decorator);
   });
 
   // 4. GAMBAR MARKER HUB (circle markers)
