@@ -97,8 +97,8 @@
       "status": "KABUPATEN PENERUSAN (DROPING)",
       "provinsi": "KALIMANTAN TENGAH",
       "coords": [
-        -2.2155107,
-        113.9052558
+        -2.206,
+        113.916
       ],
       "nos": "ANDHIKA DWI S",
       "region": "KALNUSRA",
@@ -110,8 +110,8 @@
       "status": "SUB HUB",
       "provinsi": "KALIMANTAN TENGAH",
       "coords": [
-        -2.2155107,
-        113.9052558
+        -2.535,
+        112.955
       ],
       "nos": "ANDHIKA DWI S",
       "region": "KALNUSRA",
@@ -123,8 +123,8 @@
       "status": "SUB HUB",
       "provinsi": "KALIMANTAN TENGAH",
       "coords": [
-        -2.2155107,
-        113.9052558
+        -2.683,
+        111.624
       ],
       "nos": "ANDHIKA DWI S",
       "region": "KALNUSRA",
@@ -136,8 +136,8 @@
       "status": "SUB HUB",
       "provinsi": "KALIMANTAN TENGAH",
       "coords": [
-        -2.2155107,
-        113.9052558
+        -0.961,
+        114.887
       ],
       "nos": "ANDHIKA DWI S",
       "region": "KALNUSRA",
@@ -149,8 +149,8 @@
       "status": "SUB HUB",
       "provinsi": "KALIMANTAN TENGAH",
       "coords": [
-        -2.2155107,
-        113.9052558
+        -3.003,
+        114.385
       ],
       "nos": "ANDHIKA DWI S",
       "region": "KALNUSRA",
@@ -7205,7 +7205,7 @@
       "nama_vendor": "PO LITHA",
       "sla": 1,
       "frekuensi": 5,
-      "etd_hari": "SENIN, SELASA, RABU, KAMIS, JUMÁT, SABTU",
+      "etd_hari": "SENIN, SELASA, RABU, KAMIS, JUM\u00c1T, SABTU",
       "etd_jam": "16:00",
       "eta_jam": null,
       "harga": null,
@@ -7225,7 +7225,7 @@
       "nama_vendor": "PO LITHA",
       "sla": 1,
       "frekuensi": 5,
-      "etd_hari": "SENIN, SELASA, RABU, KAMIS, JUMÁT, SABTU",
+      "etd_hari": "SENIN, SELASA, RABU, KAMIS, JUM\u00c1T, SABTU",
       "etd_jam": "16:00",
       "eta_jam": null,
       "harga": null,
@@ -7285,7 +7285,7 @@
       "nama_vendor": "PO NEO TRANS",
       "sla": 1,
       "frekuensi": 5,
-      "etd_hari": "SENIN, SELASA, RABU, KAMIS, JUMÁT, SABTU",
+      "etd_hari": "SENIN, SELASA, RABU, KAMIS, JUM\u00c1T, SABTU",
       "etd_jam": "16:00",
       "eta_jam": null,
       "harga": null,
@@ -7305,7 +7305,7 @@
       "nama_vendor": "PO NEO TRANS",
       "sla": 1,
       "frekuensi": 5,
-      "etd_hari": "SENIN, SELASA, RABU, KAMIS, JUMÁT, SABTU",
+      "etd_hari": "SENIN, SELASA, RABU, KAMIS, JUM\u00c1T, SABTU",
       "etd_jam": "16:00",
       "eta_jam": null,
       "harga": null,
@@ -8145,7 +8145,7 @@
       "nama_vendor": "PT. LPL KARGO EKSPRESS",
       "sla": 1,
       "frekuensi": 4,
-      "etd_hari": "SENIN, SELASA, RABU, KAMIS, JUMÁT, SABTU",
+      "etd_hari": "SENIN, SELASA, RABU, KAMIS, JUM\u00c1T, SABTU",
       "etd_jam": "17.00",
       "eta_jam": "45000",
       "harga": null,
@@ -8165,7 +8165,7 @@
       "nama_vendor": "PO LORENA",
       "sla": 1,
       "frekuensi": 4,
-      "etd_hari": "SENIN, SELASA, RABU, KAMIS, JUMÁT, SABTU",
+      "etd_hari": "SENIN, SELASA, RABU, KAMIS, JUM\u00c1T, SABTU",
       "etd_jam": "17.00",
       "eta_jam": null,
       "harga": null,
@@ -8185,7 +8185,7 @@
       "nama_vendor": "PT. LPL KARGO EKSPRESS",
       "sla": 1,
       "frekuensi": 5,
-      "etd_hari": "SENIN, SELASA, RABU, KAMIS, JUMÁT, SABTU",
+      "etd_hari": "SENIN, SELASA, RABU, KAMIS, JUM\u00c1T, SABTU",
       "etd_jam": "17.00",
       "eta_jam": null,
       "harga": null,
@@ -8205,7 +8205,7 @@
       "nama_vendor": "PT. LPL KARGO EKSPRESS",
       "sla": 2,
       "frekuensi": 5,
-      "etd_hari": "SENIN, SELASA, RABU, KAMIS, JUMÁT, SABTU",
+      "etd_hari": "SENIN, SELASA, RABU, KAMIS, JUM\u00c1T, SABTU",
       "etd_jam": "17.00",
       "eta_jam": null,
       "harga": null,
@@ -8225,7 +8225,7 @@
       "nama_vendor": "PT. LPL KARGO EKSPRESS",
       "sla": 2,
       "frekuensi": 5,
-      "etd_hari": "SENIN, SELASA, RABU, KAMIS, JUMÁT, SABTU",
+      "etd_hari": "SENIN, SELASA, RABU, KAMIS, JUM\u00c1T, SABTU",
       "etd_jam": "17.00",
       "eta_jam": null,
       "harga": null,
@@ -8245,7 +8245,7 @@
       "nama_vendor": "PT. LPL KARGO EKSPRESS",
       "sla": 2,
       "frekuensi": 5,
-      "etd_hari": "SENIN, SELASA, RABU, KAMIS, JUMÁT, SABTU",
+      "etd_hari": "SENIN, SELASA, RABU, KAMIS, JUM\u00c1T, SABTU",
       "etd_jam": "17.00",
       "eta_jam": null,
       "harga": null,
