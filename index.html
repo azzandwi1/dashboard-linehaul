@@ -952,11 +952,11 @@ function sRI(r, o, t, col) {
     '<tr><td>Frekuensi</td><td>'+(r.frekuensi?r.frekuensi+'x/minggu':'\u2013')+'</td></tr>'+
     '<tr><td>ETD Hari</td><td>'+(r.etd_hari||'\u2013')+'</td></tr>'+
     '<tr><td>ETD Jam</td><td>'+(r.etd_jam||'\u2013')+'</td></tr>'+
-    '<tr><td>ETA Jam</td><td>'+(r.eta_jam||'\u2013')+'</td></tr>'+
     '<tr><td>Armada</td><td>'+(r.armada||'\u2013')+'</td></tr>'+
     (r.nama_vendor?'<tr><td>Vendor</td><td>'+r.nama_vendor+'</td></tr>':'')+
     '<tr><td>Tarif</td><td>'+fmtH+'</td></tr>'+
-    (r.min_koli?'<tr><td>Min. Loadment</td><td>'+r.min_koli+(r.min_kg?' / '+r.min_kg+' kg':'')+'</td></tr>':'')+
+    '<tr><td>Min. Loadment Koli</td><td>'+(r.min_koli||'\u2013')+'</td></tr>'+
+    '<tr><td>Min. Loadment Kilo</td><td>'+(r.min_kg?r.min_kg+' kg':'\u2013')+'</td></tr>'+
     '</table></div>';
   document.getElementById('ibox').classList.add('show');
 }
