@@ -522,8 +522,8 @@ function parseGSheetData(text) {
     eta_j: headerRow.findIndex(h => h.includes('ETA (JAM)') || h.includes('TIBA/ETA')), // bisa -1 jika dihapus
     harga: findCol('HARGA', 18),
     satuan: findCol('SATUAN', 19),
-    min_k: findCol('KOLI', 20),
-    min_kg: findCol('KG', 21)
+    min_k: findCol('LOADMENT (KOLI)', findCol('MINIMUM LOADMENT (KOLI)', 20)),
+    min_kg: findCol('LOADMENT (KG)', findCol('MINIMUM LOADMENT (KG)', 21))
   };
 
   const dataRows = rows.slice(headerIdx+1);
