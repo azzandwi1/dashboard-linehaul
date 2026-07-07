@@ -624,10 +624,11 @@ function parseGSheetData(text) {
     const meta_t = dbMap[tlc_t] || {};
 
     if(!nodes[finalOriginId]) {
+      const isVirtualO = (finalOriginId !== tlc_o);
       nodes[finalOriginId] = {
         id: finalOriginId,
         nama: finalNamaO,
-        status: meta_o.status || status_o || 'KABUPATEN PENERUSAN (DROPING)',
+        status: (isVirtualO ? status_o : (meta_o.status || status_o)) || 'KABUPATEN PENERUSAN (DROPING)',
         provinsi: meta_o.provinsi || provinsi,
         coords: co,
         nos: meta_o.nos || null,
@@ -639,16 +640,17 @@ function parseGSheetData(text) {
         dispatch_wa: meta_o.dispatch_wa || null,
         pic_cabang: meta_o.pic_cabang || null,
         pic_hp: meta_o.pic_hp || null,
-        alamat: meta_o.alamat || null,
-        maps_url: meta_o.maps_url || null,
+        alamat: isVirtualO ? null : (meta_o.alamat || null),
+        maps_url: isVirtualO ? null : (meta_o.maps_url || null),
         kacab: meta_o.kacab || null
       };
     }
     if(!nodes[finalTujuanId]) {
+      const isVirtualT = (finalTujuanId !== tlc_t);
       nodes[finalTujuanId] = {
         id: finalTujuanId,
         nama: finalNamaT,
-        status: meta_t.status || status_t || 'KABUPATEN PENERUSAN (DROPING)',
+        status: (isVirtualT ? status_t : (meta_t.status || status_t)) || 'KABUPATEN PENERUSAN (DROPING)',
         provinsi: meta_t.provinsi || provinsi,
         coords: ct,
         nos: meta_t.nos || null,
@@ -660,8 +662,8 @@ function parseGSheetData(text) {
         dispatch_wa: meta_t.dispatch_wa || null,
         pic_cabang: meta_t.pic_cabang || null,
         pic_hp: meta_t.pic_hp || null,
-        alamat: meta_t.alamat || null,
-        maps_url: meta_t.maps_url || null,
+        alamat: isVirtualT ? null : (meta_t.alamat || null),
+        maps_url: isVirtualT ? null : (meta_t.maps_url || null),
         kacab: meta_t.kacab || null
       };
     }
