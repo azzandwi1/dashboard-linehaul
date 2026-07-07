@@ -561,8 +561,56 @@ function parseGSheetData(text) {
     const viaUpper = via.toUpperCase();
     if(!/DARAT|LAUT|UDARA/i.test(viaUpper)) return;
 
-    const co = COORDS_DB[tlc_o] || null;
-    const ct = COORDS_DB[tlc_t] || null;
+    let co = COORDS_DB[tlc_o] || null;
+    let ct = COORDS_DB[tlc_t] || null;
+
+    // Inisialisasi counter pergeseran radial untuk fallback data jika tidak ada geocoding
+    if (!parseGSheetData.selfLoopCounters) parseGSheetData.selfLoopCounters = {};
+
+    const isSelfLoop = (tlc_o === tlc_t);
+    let finalOriginId = tlc_o;
+    let finalTujuanId = tlc_t;
+    let finalNamaO = nama_o;
+    let finalNamaT = nama_t;
+
+    if (isSelfLoop) {
+      const cleanNameO = nama_o.split('(')[0].trim().toUpperCase();
+      const cleanNameT = nama_t.split('(')[0].trim().toUpperCase();
+      
+      if (flow === 'DELIVERY') {
+        // Tujuan adalah sub-destinasi (kecamatan)
+        finalTujuanId = tlc_t + '_' + cleanNameT.replace(/[^A-Z0-9]/g, '');
+        finalNamaT = nama_t;
+        
+        const subKey = tlc_t + ':' + cleanNameT;
+        if (typeof SUB_DEST_COORDS !== 'undefined' && SUB_DEST_COORDS[subKey]) {
+          ct = [SUB_DEST_COORDS[subKey][0], SUB_DEST_COORDS[subKey][1]];
+        } else if (co) {
+          // Fallback spiral offset
+          if (!parseGSheetData.selfLoopCounters[tlc_o]) parseGSheetData.selfLoopCounters[tlc_o] = 0;
+          const count = parseGSheetData.selfLoopCounters[tlc_o]++;
+          const angle = (count * 20) * (Math.PI / 180);
+          const dist = 0.04 + (Math.floor(count / 18) * 0.015);
+          ct = [co[0] + Math.sin(angle) * dist, co[1] + Math.cos(angle) * dist];
+        }
+      } else {
+        // Asal adalah sub-destinasi (kecamatan)
+        finalOriginId = tlc_o + '_' + cleanNameO.replace(/[^A-Z0-9]/g, '');
+        finalNamaO = nama_o;
+        
+        const subKey = tlc_o + ':' + cleanNameO;
+        if (typeof SUB_DEST_COORDS !== 'undefined' && SUB_DEST_COORDS[subKey]) {
+          co = [SUB_DEST_COORDS[subKey][0], SUB_DEST_COORDS[subKey][1]];
+        } else if (ct) {
+          // Fallback spiral offset
+          if (!parseGSheetData.selfLoopCounters[tlc_t]) parseGSheetData.selfLoopCounters[tlc_t] = 0;
+          const count = parseGSheetData.selfLoopCounters[tlc_t]++;
+          const angle = (count * 20) * (Math.PI / 180);
+          const dist = 0.04 + (Math.floor(count / 18) * 0.015);
+          co = [ct[0] + Math.sin(angle) * dist, ct[1] + Math.cos(angle) * dist];
+        }
+      }
+    }
 
     // Gunakan LOCAL_FALLBACK_DATA untuk enrich data detail PIC/Cabang
     const dbMap = {};
@@ -575,11 +623,11 @@ function parseGSheetData(text) {
     const meta_o = dbMap[tlc_o] || {};
     const meta_t = dbMap[tlc_t] || {};
 
-    if(!nodes[tlc_o]) {
-      nodes[tlc_o] = {
-        id: tlc_o,
-        nama: meta_o.nama || nama_o,
-        status: meta_o.status || status_o,
+    if(!nodes[finalOriginId]) {
+      nodes[finalOriginId] = {
+        id: finalOriginId,
+        nama: finalNamaO,
+        status: isSelfLoop && flow !== 'DELIVERY' ? 'KABUPATEN PENERUSAN (DROPING)' : (meta_o.status || status_o),
         provinsi: meta_o.provinsi || provinsi,
         coords: co,
         nos: meta_o.nos || null,
@@ -596,11 +644,11 @@ function parseGSheetData(text) {
         kacab: meta_o.kacab || null
       };
     }
-    if(!nodes[tlc_t]) {
-      nodes[tlc_t] = {
-        id: tlc_t,
-        nama: meta_t.nama || nama_t,
-        status: meta_t.status || status_t,
+    if(!nodes[finalTujuanId]) {
+      nodes[finalTujuanId] = {
+        id: finalTujuanId,
+        nama: finalNamaT,
+        status: isSelfLoop && flow === 'DELIVERY' ? 'KABUPATEN PENERUSAN (DROPING)' : (meta_t.status || status_t),
         provinsi: meta_t.provinsi || provinsi,
         coords: ct,
         nos: meta_t.nos || null,
@@ -620,7 +668,7 @@ function parseGSheetData(text) {
 
     if(!co || !ct) return;
 
-    routes.push({flow,provinsi,origin:tlc_o,nama_origin:nama_o,tujuan:tlc_t,nama_tujuan:nama_t,via,armada,jarak,waktu,
+    routes.push({flow,provinsi,origin:finalOriginId,nama_origin:nama_o,tujuan:finalTujuanId,nama_tujuan:nama_t,via,armada,jarak,waktu,
       nama_vendor:vendor,sla,frekuensi:freq,etd_hari:etd_h,etd_jam:etd_j,eta_jam:eta_j,
       harga,satuan,min_koli:min_k,min_kg});
   });
@@ -815,35 +863,11 @@ function rM() {
   document.getElementById('fn').textContent = fN.length;
 
   // 3. GAMBAR RUTE (polylines)
-  const selfLoopCounters = {};
   fR.forEach(r => {
     const o = nmap[r.origin], t = nmap[r.tujuan];
     if(!o?.coords || !t?.coords) return;
-    
-    let startCoords = [o.coords[0], o.coords[1]];
-    let endCoords = [t.coords[0], t.coords[1]];
-    
-    // Jika rute adalah self-loop (SMI -> SMI, CJR -> CJR, dll), coba cari koordinat spesifik kecamatannya
-    let isSelfLoop = (r.origin === r.tujuan);
-    if (isSelfLoop) {
-      const subKey = r.origin + ':' + (r.nama_tujuan || '').split('(')[0].trim().toUpperCase();
-      if (typeof SUB_DEST_COORDS !== 'undefined' && SUB_DEST_COORDS[subKey]) {
-        endCoords = [SUB_DEST_COORDS[subKey][0], SUB_DEST_COORDS[subKey][1]];
-      } else {
-        if (!selfLoopCounters[r.origin]) selfLoopCounters[r.origin] = 0;
-        const count = selfLoopCounters[r.origin];
-        selfLoopCounters[r.origin]++;
-        
-        // Hitung sudut pemancaran radial (misal: memutar 360 derajat secara merata)
-        const angle = (count * 20) * (Math.PI / 180); // jeda 20 derajat per rute
-        // Jarak pemancaran (sedikit membesar agar tidak bertumpuk jika rute sangat banyak)
-        const dist = 0.04 + (Math.floor(count / 18) * 0.015);
-        
-        endCoords[0] = startCoords[0] + (Math.sin(angle) * dist);
-        endCoords[1] = startCoords[1] + (Math.cos(angle) * dist);
-      }
-    }
 
+    const isSelfLoop = r.origin.split('_')[0] === r.tujuan.split('_')[0];
     const via = (r.via||'').toUpperCase();
     let col = VC.DARAT;
     if(via.includes('LAUT'))  col = VC.LAUT;
@@ -852,7 +876,7 @@ function rM() {
     const op = 0.72;
     const dsh = via.includes('UDARA');
     
-    const ln = L.polyline([startCoords, endCoords], {
+    const ln = L.polyline([o.coords, t.coords], {
       color: col,
       weight: w,
       opacity: op,
