@@ -497,17 +497,28 @@ function parseGSheetData(text) {
   
   // Helper pencari index kolom berdasarkan kata kunci
   const findCol = (kw, fallback) => {
-    const idx = headerRow.findIndex(h => h.includes(kw));
+    // 1. Coba pencocokan tepat (exact match)
+    let idx = headerRow.findIndex(h => h === kw);
+    if (idx !== -1) return idx;
+    
+    // 2. Coba pencocokan parsial (includes), hindari kolom 'NAMA' atau 'STATUS' jika mencari kode TLC/ORIGIN/TUJUAN
+    if (kw === 'ORIGIN' || kw === 'TUJUAN') {
+      idx = headerRow.findIndex(h => h.includes(kw) && !h.includes('NAMA') && !h.includes('STATUS'));
+      if (idx !== -1) return idx;
+    }
+    
+    // 3. Pencocokan parsial standar
+    idx = headerRow.findIndex(h => h.includes(kw));
     return idx !== -1 ? idx : fallback;
   };
 
   const idx = {
     flow: findCol('FLOW', 0),
     provinsi: findCol('PROVINSI', 1),
-    tlc_o: findCol('TLC ORIGIN', 2),
+    tlc_o: findCol('ORIGIN', 2),
     nama_o: findCol('NAMA ORIGIN', 3),
     status_o: findCol('STATUS ORIGIN', 4),
-    tlc_t: findCol('TLC TUJUAN', 5),
+    tlc_t: findCol('TUJUAN', 5),
     nama_t: findCol('NAMA TUJUAN', 6),
     status_t: findCol('STATUS TUJUAN', 7),
     via: findCol('VIA', 8),
@@ -519,7 +530,7 @@ function parseGSheetData(text) {
     freq: findCol('FREKUENSI', 14),
     etd_h: findCol('ETD (HARI)', 15),
     etd_j: findCol('ETD (JAM)', 16),
-    eta_j: headerRow.findIndex(h => h.includes('ETA (JAM)') || h.includes('TIBA/ETA')), // bisa -1 jika dihapus
+    eta_j: headerRow.findIndex(h => h.includes('ETA (JAM)') || h.includes('TIBA/ETA')),
     harga: findCol('HARGA', 18),
     satuan: findCol('SATUAN', 19),
     min_k: findCol('LOADMENT (KOLI)', findCol('MINIMUM LOADMENT (KOLI)', 20)),
