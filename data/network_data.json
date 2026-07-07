@@ -771,7 +771,7 @@
       "id": "PLM",
       "nama": "PALEMBANG",
       "status": "HUB UTAMA",
-      "provinsi": "SUMSEL",
+      "provinsi": "SUMATERA SELATAN",
       "coords": [
         -2.9762,
         104.7754
@@ -784,7 +784,7 @@
       "id": "KAG",
       "nama": "KAYUAGUNG",
       "status": "KABUPATEN PENERUSAN (DROPING)",
-      "provinsi": "SUMSEL",
+      "provinsi": "SUMATERA SELATAN",
       "coords": [
         -3.4583,
         104.8452
@@ -797,7 +797,7 @@
       "id": "SKY",
       "nama": "SEKAYU",
       "status": "KABUPATEN PENERUSAN (DROPING)",
-      "provinsi": "SUMSEL",
+      "provinsi": "SUMATERA SELATAN",
       "coords": [
         -2.5951614,
         104.1092736
@@ -810,7 +810,7 @@
       "id": "LHT",
       "nama": "LAHAT",
       "status": "SUB HUB",
-      "provinsi": "SUMSEL",
+      "provinsi": "SUMATERA SELATAN",
       "coords": [
         -3.7956,
         103.5338
@@ -823,7 +823,7 @@
       "id": "LLG",
       "nama": "LUBUK LINGGAU",
       "status": "SUB HUB",
-      "provinsi": "SUMSEL",
+      "provinsi": "SUMATERA SELATAN",
       "coords": [
         -3.3015,
         102.8603
@@ -940,7 +940,7 @@
       "id": "PDG",
       "nama": "PADANG",
       "status": "HUB UTAMA",
-      "provinsi": "SUMBAR",
+      "provinsi": "SUMATERA BARAT",
       "coords": [
         -0.909345,
         100.357904
@@ -953,7 +953,7 @@
       "id": "BKT",
       "nama": "BUKITTINGGI",
       "status": "SUB HUB",
-      "provinsi": "SUMBAR",
+      "provinsi": "SUMATERA BARAT",
       "coords": [
         -0.2973389,
         100.3925784
@@ -966,7 +966,7 @@
       "id": "PYK",
       "nama": "PAYAKUMBUH",
       "status": "SUB HUB",
-      "provinsi": "SUMBAR",
+      "provinsi": "SUMATERA BARAT",
       "coords": [
         -0.226,
         100.641
@@ -979,7 +979,7 @@
       "id": "SLK",
       "nama": "SOLOK",
       "status": "SUB HUB",
-      "provinsi": "SUMBAR",
+      "provinsi": "SUMATERA BARAT",
       "coords": [
         -0.7897,
         100.6604
@@ -992,7 +992,7 @@
       "id": "DRY",
       "nama": "DHARMASRAYA",
       "status": "SUB HUB",
-      "provinsi": "SUMBAR",
+      "provinsi": "SUMATERA BARAT",
       "coords": [
         -1.4503,
         101.3522
@@ -1005,7 +1005,7 @@
       "id": "PRM",
       "nama": "PARIAMAN",
       "status": "SUB HUB",
-      "provinsi": "SUMBAR",
+      "provinsi": "SUMATERA BARAT",
       "coords": [
         -0.6284987,
         100.1388351
@@ -1018,7 +1018,7 @@
       "id": "SPP",
       "nama": "PASAMAN BARAT",
       "status": "SUB HUB",
-      "provinsi": "SUMBAR",
+      "provinsi": "SUMATERA BARAT",
       "coords": [
         0.0883,
         99.6514
@@ -1031,7 +1031,7 @@
       "id": "PNN",
       "nama": "PESISIR SELATAN",
       "status": "SUB HUB",
-      "provinsi": "SUMBAR",
+      "provinsi": "SUMATERA BARAT",
       "coords": [
         -1.8497,
         100.5792
@@ -1421,7 +1421,7 @@
       "id": "PLI",
       "nama": "POLEWALI",
       "status": "SUB HUB",
-      "provinsi": "SULAWESI SELATAN",
+      "provinsi": "SULAWESI BARAT",
       "coords": [
         -3.3985727,
         119.2148839
@@ -1434,7 +1434,7 @@
       "id": "MMJ",
       "nama": "MAMUJU",
       "status": "SUB HUB",
-      "provinsi": "SULAWESI SELATAN",
+      "provinsi": "SULAWESI BARAT",
       "coords": [
         -2.676321,
         118.8835934
@@ -1447,7 +1447,7 @@
       "id": "PLW",
       "nama": "PALU",
       "status": "HUB UTAMA",
-      "provinsi": "SULAWESI SELATAN",
+      "provinsi": "SULAWESI TENGAH",
       "coords": [
         -0.9180411,
         119.8640884
@@ -1460,7 +1460,7 @@
       "id": "GTO",
       "nama": "GORONTALO",
       "status": "HUB UTAMA",
-      "provinsi": "SULAWESI SELATAN",
+      "provinsi": "GORONTALO",
       "coords": [
         0.5875786,
         123.0355363
@@ -1473,7 +1473,7 @@
       "id": "MDC",
       "nama": "MANADO",
       "status": "HUB UTAMA",
-      "provinsi": "SULAWESI SELATAN",
+      "provinsi": "SULAWESI UTARA",
       "coords": [
         1.488,
         124.848
@@ -1486,7 +1486,7 @@
       "id": "KDI",
       "nama": "KENDARI",
       "status": "HUB UTAMA",
-      "provinsi": "SULAWESI SELATAN",
+      "provinsi": "SULAWESI TENGGARA",
       "coords": [
         -4.081,
         122.517
@@ -2692,7 +2692,7 @@
       "id": "CGK",
       "nama": "JAKARTA",
       "status": "HUB UTAMA",
-      "provinsi": "JAWA TIMUR",
+      "provinsi": "DKI JAKARTA",
       "coords": [
         -6.175,
         106.827
@@ -2770,7 +2770,7 @@
       "id": "MGL",
       "nama": "MAGELANG",
       "status": "SUB HUB",
-      "provinsi": "YOGYAKARTA",
+      "provinsi": "JAWA TENGAH",
       "coords": [
         -7.4712,
         110.2173
@@ -2783,7 +2783,7 @@
       "id": "WNB",
       "nama": "WONOSOBO",
       "status": "SUB HUB",
-      "provinsi": "YOGYAKARTA",
+      "provinsi": "JAWA TENGAH",
       "coords": [
         -7.3688171,
         109.8973563
@@ -2796,7 +2796,7 @@
       "id": "KLT",
       "nama": "KLATEN",
       "status": "SUB HUB",
-      "provinsi": "YOGYAKARTA",
+      "provinsi": "JAWA TENGAH",
       "coords": [
         -7.7063,
         110.609
