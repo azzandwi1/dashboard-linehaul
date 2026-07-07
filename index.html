@@ -627,7 +627,7 @@ function parseGSheetData(text) {
       nodes[finalOriginId] = {
         id: finalOriginId,
         nama: finalNamaO,
-        status: isSelfLoop && flow !== 'DELIVERY' ? 'KABUPATEN PENERUSAN (DROPING)' : (meta_o.status || status_o),
+        status: meta_o.status || status_o || 'KABUPATEN PENERUSAN (DROPING)',
         provinsi: meta_o.provinsi || provinsi,
         coords: co,
         nos: meta_o.nos || null,
@@ -648,7 +648,7 @@ function parseGSheetData(text) {
       nodes[finalTujuanId] = {
         id: finalTujuanId,
         nama: finalNamaT,
-        status: isSelfLoop && flow === 'DELIVERY' ? 'KABUPATEN PENERUSAN (DROPING)' : (meta_t.status || status_t),
+        status: meta_t.status || status_t || 'KABUPATEN PENERUSAN (DROPING)',
         provinsi: meta_t.provinsi || provinsi,
         coords: ct,
         nos: meta_t.nos || null,
