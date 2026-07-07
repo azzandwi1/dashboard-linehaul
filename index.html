@@ -983,13 +983,18 @@ function sNI(n, routes) {
 function sRI(r, o, t, col) {
   const via=r.via||'\u2013';
   const fmtH = r.harga ? 'Rp '+Number(r.harga).toLocaleString('id-ID')+(r.satuan?' /'+r.satuan.toLowerCase():'') : '\u2013';
+  
+  const isSelf = (r.origin === r.tujuan);
+  const nameO = isSelf ? (r.nama_origin || o.nama) : o.nama;
+  const nameT = isSelf ? (r.nama_tujuan || t.nama) : t.nama;
+
   document.getElementById('ibox-c').innerHTML =
-    '<div class="pop"><h3 style="font-size:13px">'+o.nama+' \u2192 '+t.nama+'</h3>'+
+    '<div class="pop"><h3 style="font-size:13px">'+nameO+' \u2192 '+nameT+'</h3>'+
     '<span class="tag" style="background:'+col+'22;color:'+col+'">'+via+'</span>'+
     '<table>'+
     '<tr><td>Flow</td><td>'+(r.flow||'\u2013')+'</td></tr>'+
-    '<tr><td>Origin</td><td>'+r.origin+'</td></tr>'+
-    '<tr><td>Tujuan</td><td>'+r.tujuan+'</td></tr>'+
+    '<tr><td>Origin</td><td>'+r.origin+' ('+nameO+')</td></tr>'+
+    '<tr><td>Tujuan</td><td>'+r.tujuan+' ('+nameT+')</td></tr>'+
     '<tr><td>Jarak</td><td><b>'+(r.jarak?r.jarak+' km':'\u2013')+'</b></td></tr>'+
     '<tr><td>Waktu Tempuh</td><td><b>'+(r.waktu||'\u2013')+'</b></td></tr>'+
     '<tr><td>SLA</td><td>'+(r.sla?r.sla+' hari':'\u2013')+'</td></tr>'+
