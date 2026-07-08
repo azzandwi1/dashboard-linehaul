@@ -565,6 +565,17 @@ function parseGSheetData(text) {
     let co = COORDS_DB[tlc_o] || null;
     let ct = COORDS_DB[tlc_t] || null;
 
+    // Gunakan LOCAL_FALLBACK_DATA untuk enrich data detail PIC/Cabang
+    const dbMap = {};
+    if (typeof LOCAL_FALLBACK_DATA !== 'undefined' && LOCAL_FALLBACK_DATA.nodes) {
+      LOCAL_FALLBACK_DATA.nodes.forEach(dbNode => {
+        dbMap[dbNode.id] = dbNode;
+      });
+    }
+
+    const meta_o = dbMap[tlc_o] || {};
+    const meta_t = dbMap[tlc_t] || {};
+
     // Inisialisasi counter pergeseran radial untuk fallback data jika tidak ada geocoding
     if (!parseGSheetData.selfLoopCounters) parseGSheetData.selfLoopCounters = {};
 
@@ -577,8 +588,19 @@ function parseGSheetData(text) {
     if (isSelfLoop) {
       const cleanNameO = nama_o.split('(')[0].trim().toUpperCase();
       const cleanNameT = nama_t.split('(')[0].trim().toUpperCase();
+      const parentNameFromDb = (meta_o.nama || meta_t.nama || nama_o || tlc_o).split('(')[0].trim().toUpperCase();
       
-      if (flow === 'DELIVERY') {
+      // Deteksi secara cerdas mana yang merupakan sub-destinasi (nama yang tidak sama dengan parent hub)
+      let isDestSub = false;
+      if (cleanNameT !== parentNameFromDb) {
+        isDestSub = true;
+      } else if (cleanNameO !== parentNameFromDb) {
+        isDestSub = false;
+      } else {
+        isDestSub = (flow === 'DELIVERY');
+      }
+
+      if (isDestSub) {
         // Tujuan adalah sub-destinasi (kecamatan)
         finalTujuanId = tlc_t + '_' + cleanNameT.replace(/[^A-Z0-9]/g, '');
         finalNamaT = nama_t;
@@ -612,17 +634,6 @@ function parseGSheetData(text) {
         }
       }
     }
-
-    // Gunakan LOCAL_FALLBACK_DATA untuk enrich data detail PIC/Cabang
-    const dbMap = {};
-    if (typeof LOCAL_FALLBACK_DATA !== 'undefined' && LOCAL_FALLBACK_DATA.nodes) {
-      LOCAL_FALLBACK_DATA.nodes.forEach(dbNode => {
-        dbMap[dbNode.id] = dbNode;
-      });
-    }
-
-    const meta_o = dbMap[tlc_o] || {};
-    const meta_t = dbMap[tlc_t] || {};
 
     if(!nodes[finalOriginId]) {
       const isVirtualO = (finalOriginId !== tlc_o);
