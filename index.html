@@ -289,6 +289,20 @@
         <option value="KABUPATEN PENERUSAN (DROPING)">DROPING</option>
       </select>
     </div>
+    
+    <div class="fg" style="margin-top:14px;border-top:1px dashed var(--bd);padding-top:12px;">
+      <div class="fl" style="font-weight:700;color:var(--ab);margin-bottom:8px">&#128269; Cari Rute Spesifik</div>
+    </div>
+    <div class="fg"><div class="fl">Origin (TLC Asal)</div>
+      <select class="fsel" id="f-origin" onchange="aF()">
+        <option value="">Semua Origin</option>
+      </select>
+    </div>
+    <div class="fg"><div class="fl">Tujuan (TLC Arah)</div>
+      <select class="fsel" id="f-tujuan" onchange="aF()">
+        <option value="">Semua Tujuan</option>
+      </select>
+    </div>
     <div class="fst">
       <div class="fstv"><div class="fstv-n" id="fr">–</div><div class="fstv-l">Rute Tampil</div></div>
       <div class="fstv"><div class="fstv-n" id="fn">–</div><div class="fstv-l">TLC Tampil</div></div>
@@ -420,7 +434,8 @@ const REGION_PROVINCES = {
 const F = {
   provinsi:'', via:new Set(['DARAT','LAUT','UDARA']),
   flow:new Set(['DELIVERY','RETURN']),
-  armada:new Set(['INHOUSE SAPX','VENDOR']), status:''
+  armada:new Set(['INHOUSE SAPX','VENDOR']), status:'',
+  origin: '', tujuan: ''
 };
 const VC = {DARAT:'#22c55e', LAUT:'#3b82f6', UDARA:'#a855f7'};
 const SC  = {'HUB UTAMA':'#ef4444','SUB HUB':'#22c55e','KABUPATEN PENERUSAN (DROPING)':'#f59e0b'};
@@ -791,6 +806,27 @@ async function loadData() {
     sel.innerHTML = '<option value="">Semua Provinsi</option>';
     const provs = [...new Set(data.nodes.map(n=>n.provinsi).filter(Boolean))].sort();
     provs.forEach(p => { const o=document.createElement('option'); o.value=p; o.textContent=p; sel.appendChild(o); });
+    
+    // Populasikan Origin dan Tujuan
+    const oSel = document.getElementById('f-origin');
+    const tSel = document.getElementById('f-tujuan');
+    if (oSel && tSel) {
+      oSel.innerHTML = '<option value="">Semua Origin</option>';
+      tSel.innerHTML = '<option value="">Semua Tujuan</option>';
+      const sortedNodes = [...data.nodes].sort((a,b) => a.nama.localeCompare(b.nama));
+      sortedNodes.forEach(n => {
+        const oOpt = document.createElement('option');
+        oOpt.value = n.id;
+        oOpt.textContent = n.id + ' \u2014 ' + n.nama;
+        oSel.appendChild(oOpt);
+        
+        const tOpt = document.createElement('option');
+        tOpt.value = n.id;
+        tOpt.textContent = n.id + ' \u2014 ' + n.nama;
+        tSel.appendChild(tOpt);
+      });
+    }
+
     document.getElementById('sn').textContent = data.nodes.length;
     document.getElementById('sr').textContent = data.routes.length;
     const km = data.routes.reduce((s,r) => s+(r.jarak||0), 0);
@@ -855,6 +891,10 @@ function rM() {
     if (activeHub) {
       if (r.origin !== activeHub && r.tujuan !== activeHub) return false;
     }
+
+    // F. Filter Origin & Tujuan Spesifik
+    if (F.origin && r.origin !== F.origin) return false;
+    if (F.tujuan && r.tujuan !== F.tujuan) return false;
 
     return true;
   });
@@ -1062,10 +1102,19 @@ function clearActiveHub() {
   rM();
 }
 
-function aF()    { F.provinsi=document.getElementById('fp').value; F.status=document.getElementById('fs').value; rM(); }
+function aF() {
+  F.provinsi = document.getElementById('fp').value;
+  F.status = document.getElementById('fs').value;
+  F.origin = document.getElementById('f-origin').value;
+  F.tujuan = document.getElementById('f-tujuan').value;
+  rM();
+}
 function resetF() {
-  document.getElementById('fp').value=''; document.getElementById('fs').value='';
-  F.provinsi=''; F.status='';
+  document.getElementById('fp').value='';
+  document.getElementById('fs').value='';
+  document.getElementById('f-origin').value='';
+  document.getElementById('f-tujuan').value='';
+  F.provinsi=''; F.status=''; F.origin=''; F.tujuan='';
   F.via    = new Set(['DARAT','LAUT','UDARA']);
   F.flow   = new Set(['DELIVERY','RETURN']);
   F.armada = new Set(['INHOUSE SAPX','VENDOR']);
