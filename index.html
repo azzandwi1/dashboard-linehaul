@@ -844,6 +844,48 @@ async function refreshData() {
   btn.classList.remove('spinning'); btn.disabled=false;
 }
 
+// Helper BFS untuk melacak jalur logistik transit/multi-hop rute
+function findRoutePaths(routes, startId, endId) {
+  const queue = [[startId]];
+  const visited = new Set([startId]);
+  const paths = [];
+  
+  while (queue.length > 0) {
+    const path = queue.shift();
+    const node = path[path.length - 1];
+    
+    if (node === endId) {
+      paths.push(path);
+      continue;
+    }
+    
+    if (path.length > 4) continue; // Maksimal 3 transit (4 nodes)
+    
+    // Cari semua destinasi rute keluar dari node aktif
+    const neighbors = routes.filter(r => r.origin === node).map(r => r.tujuan);
+    for (const neighbor of neighbors) {
+      if (!path.includes(neighbor)) {
+        queue.push([...path, neighbor]);
+      }
+    }
+  }
+  
+  const matchingRoutes = new Set();
+  paths.forEach(p => {
+    for (let i = 0; i < p.length - 1; i++) {
+      const u = p[i];
+      const v = p[i+1];
+      routes.forEach(r => {
+        if (r.origin === u && r.tujuan === v) {
+          matchingRoutes.add(r);
+        }
+      });
+    }
+  });
+  
+  return matchingRoutes;
+}
+
 // ══ RENDER MAP ══
 function rM() {
   if(!allData) return;
@@ -867,8 +909,28 @@ function rM() {
     }
   }
 
+  // Cek apakah user sedang menyaring kombinasi Origin dan Tujuan tertentu (Transit/Multi-hop)
+  let transitRouteSet = null;
+  if (F.origin && F.tujuan) {
+    transitRouteSet = findRoutePaths(allData.routes, F.origin, F.tujuan);
+  }
+
   // 1. FILTER RUTE (routes)
   const fR = allData.routes.filter(r => {
+    // Jika filter pencarian rute spesifik aktif (kedua filter diisi):
+    if (transitRouteSet) {
+      if (!transitRouteSet.has(r)) return false;
+      
+      // Tetap terapkan filter global dasar (Mode Transportasi, Flow, Armada) agar konsisten dengan pilihan user
+      const via = (r.via||'').toUpperCase();
+      if(![...F.via].some(v => via.includes(v))) return false;
+      if(!F.flow.has(r.flow)) return false;
+      if(!F.armada.has(r.armada)) return false;
+      
+      return true;
+    }
+
+    // Jika filter biasa (bukan pencarian rute spesifik lengkap):
     // A. Filter dropdown Provinsi
     if(F.provinsi && r.provinsi !== F.provinsi) return false;
     
@@ -880,19 +942,19 @@ function rM() {
     if(!F.flow.has(r.flow)) return false;
     if(!F.armada.has(r.armada)) return false;
 
-    // D. Filter Region Geografis Aktif (filter dari menu bawah)
+    // D. Filter Region Geografis Aktif
     if (activeRegion && REGION_PROVINCES[activeRegion]) {
       const allowedProvs = REGION_PROVINCES[activeRegion];
       const matchProv = allowedProvs.includes(r.provinsi ? r.provinsi.toUpperCase() : '');
       if (!matchProv) return false;
     }
 
-    // E. Filter Hub Aktif (klik marker / hub list)
+    // E. Filter Hub Aktif
     if (activeHub) {
       if (r.origin !== activeHub && r.tujuan !== activeHub) return false;
     }
 
-    // F. Filter Origin & Tujuan Spesifik
+    // F. Filter Origin & Tujuan Spesifik (jika hanya salah satu yang diisi)
     if (F.origin && r.origin !== F.origin) return false;
     if (F.tujuan && r.tujuan !== F.tujuan) return false;
 
